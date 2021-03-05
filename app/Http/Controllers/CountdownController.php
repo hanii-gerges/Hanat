@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Countdown;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CountdownController extends Controller
 {
@@ -14,19 +15,10 @@ class CountdownController extends Controller
      */
     public function index()
     {
-        
+
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -35,7 +27,19 @@ class CountdownController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => 'required',
+            'finishTime' => 'required|date'
+        ]);
+
+        $countdown = Countdown::create([
+            'user_id' => Auth::user()->id,
+            'title' => $request->title,
+            'finishTime' => $request->finishTime,
+        ]);
+
+        return response()->json(['status' => 'ok']);
+
     }
 
     /**
@@ -49,16 +53,6 @@ class CountdownController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Countdown  $countdown
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Countdown $countdown)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -69,7 +63,18 @@ class CountdownController extends Controller
      */
     public function update(Request $request, Countdown $countdown)
     {
-        //
+        $request->validate([
+            'title' => 'required',
+            'finishTime' => 'required|date'
+        ]);
+
+        $countdown->update([
+            'title' => $request->title,
+            'finishTime' => $request->finishTime,
+        ]);
+
+        return response()->json(['status' => 'ok']);
+
     }
 
     /**
@@ -80,6 +85,8 @@ class CountdownController extends Controller
      */
     public function destroy(Countdown $countdown)
     {
-        //
+        $countdown->delete();
+        return response()->json(['status' => 'ok']);
+
     }
 }
