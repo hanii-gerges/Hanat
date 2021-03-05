@@ -13,6 +13,7 @@ class Countdown extends Model
         'user_id',
         'title',
         'finishTime',
+        'finished',
     ];
 
     function user()

@@ -48,6 +48,17 @@ class AuthController extends Controller
     public function userInfo()
     {
         $user = Auth::user();
+        foreach($user->countdowns as $countdown)
+        {
+            if($countdown->finished == false)
+            {
+                $currentTime = now();
+                if($countdown->finishTime < $currentTime)
+                {
+                    $countdown->update(['finished'=>1]);
+                }
+            }
+        }
         return new UserResource($user);
     }
 }
