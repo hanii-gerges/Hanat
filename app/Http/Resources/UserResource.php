@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Countdown;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -15,9 +16,12 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
+        $countdowns = request('finished') == '1' ? $this->countdowns : Countdown::where('user_id',$this->id)->where('finished',0)->get();
         return [
             'id' => $this->id,
-            'name' => $this->name,  
+            'name' => $this->name, 
+            'countdowns' => $countdowns,
+             
             //'cards' => $this->cards,          
         ];
     }
